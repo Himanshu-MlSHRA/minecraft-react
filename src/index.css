@@ -1,0 +1,161 @@
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ================= BACKGROUND ================= */
+.fullscreen-bg {
+  width: 100vw;
+  height: 100vh;
+  object-fit: fill;
+  display: block;
+
+  /* VERY IMPORTANT: background mouse events na khaaye */
+  pointer-events: none;
+}
+
+/* ================= DESKTOP ICON ================= */
+.desktop-item {
+  position: fixed;
+
+  width: 88px;                /* Windows-like tight width */
+  padding: 4px 2px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  user-select: none;
+  cursor: default;
+  border-radius: 3px;
+  z-index: 10;
+
+  transition:
+    left 0.2s cubic-bezier(0.2, 0.6, 0.2, 1),
+    top 0.2s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+.desktop-item img {
+  width: 64px;
+  height: 64px;
+  display: block;
+  pointer-events: none;
+}
+
+.desktop-item span {
+  margin-top: 1px;            /* icon-text gap kam */
+  font-size: 14px;            /* thoda bada text */
+  line-height: 1.15;          /* overlap / weird spacing fix */
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px black;
+}
+
+/* ================= SELECTION (WINDOWS STYLE) ================= */
+.desktop-item.selected {
+  background: rgba(255, 255, 255, 0.12);
+  outline: 1px dotted rgba(255, 255, 255, 0.7);
+  outline-offset: -2px;       /* IMPORTANT: box tight rakhta hai */
+}
+
+/* ================= GHOST DRAG ICON ================= */
+.ghost-item {
+  position: fixed;
+
+  width: 88px;
+  padding: 4px 2px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 9999;              /* real icons se upar */
+
+  transform: scale(0.95);     /* thoda light ghost feel */
+}
+
+.ghost-item img {
+  width: 64px;
+  height: 64px;
+}
+
+.ghost-item span {
+  margin-top: 1px;
+  font-size: 14px;
+  line-height: 1.15;
+  color: white;
+  text-shadow: 0 1px 2px black;
+}
+
+/* ================= FOLDER WINDOW ================= */
+.folder-window {
+  position: fixed;
+  top: 120px;
+  left: 200px;
+
+  width: 460px;
+  height: 320px;
+
+  background: #1e1e1e;
+  border-radius: 8px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+/* ===== Folder Title Bar ===== */
+.folder-header {
+  height: 36px;
+  background: #2b2b2b;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 12px;
+  color: white;
+  font-size: 13px;
+}
+
+/* ===== Window Buttons (Windows / Mac hybrid style) ===== */
+.folder-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ================= FOLDER CONTENT ================= */
+.folder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 80px);
+  gap: 16px;
+  padding: 16px;
+}
+
+.file-item {
+  text-align: center;
+  color: white;
+  font-size: 12px;
+}
+
+.file-icon {
+  font-size: 32px;
+  margin-bottom: 4px;
+}
