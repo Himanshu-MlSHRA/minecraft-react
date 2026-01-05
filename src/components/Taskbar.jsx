@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import ClockPanel from "./ClockPanel";
+import MusicControl from "./MusicControl";
 
-export default function Taskbar({ icons, onOpenApp }) {
+export default function Taskbar({ icons, onOpenApp, onRefresh, audioRef }) {
   const [showSearch, setShowSearch] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [query, setQuery] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
+  const [locked, setLocked] = useState(false);
   const [now, setNow] = useState(new Date());
 
   const searchRef = useRef(null);
@@ -12,16 +15,13 @@ export default function Taskbar({ icons, onOpenApp }) {
   const searchBtnRef = useRef(null);
   const clockBtnRef = useRef(null);
 
-  // live clock
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  // outside click handler (SEARCH + CALENDAR both)
   useEffect(() => {
     const handler = (e) => {
-      // close search
       if (
         showSearch &&
         searchRef.current &&
@@ -32,7 +32,6 @@ export default function Taskbar({ icons, onOpenApp }) {
         setQuery("");
       }
 
-      // close calendar
       if (
         showCalendar &&
         calendarRef.current &&
@@ -53,7 +52,6 @@ export default function Taskbar({ icons, onOpenApp }) {
 
   return (
     <>
-      {/* SEARCH PANEL */}
       {showSearch && (
         <div className="search-panel" ref={searchRef}>
           <input
@@ -79,7 +77,7 @@ export default function Taskbar({ icons, onOpenApp }) {
                   setQuery("");
                 }}
               >
-                <img src={app.icon} alt="" />
+                <img src={app.icon} />
                 <div>
                   <div className="search-title">{app.name}</div>
                   <div className="search-desc">{app.description}</div>
@@ -90,14 +88,12 @@ export default function Taskbar({ icons, onOpenApp }) {
         </div>
       )}
 
-      {/* CALENDAR PANEL */}
       {showCalendar && (
         <div ref={calendarRef}>
           <ClockPanel />
         </div>
       )}
 
-      {/* TASKBAR */}
       <div className="taskbar">
         <div className="taskbar-left">
           <button
@@ -108,11 +104,46 @@ export default function Taskbar({ icons, onOpenApp }) {
               setShowCalendar(false);
             }}
           >
-            <img src="/icons/windows-logo.png" alt="Windows" />
+            <img src="/icons/windows-logo.png" />
           </button>
         </div>
 
         <div className="taskbar-right">
+          <div className="system-tray">
+            <button className="tray-arrow">▲</button>
+
+            <div className="tray-lang">
+              <div>ENG</div>
+              <div className="tray-sub">IN</div>
+            </div>
+
+            <img src="/icons/wifi.png" className="tray-icon" />
+
+            <MusicControl audioRef={audioRef} />
+
+            <img
+              src="/icons/refresh.png"
+              className={`tray-icon refresh-btn ${refreshing ? "spin" : ""}`}
+              style={{ pointerEvents: locked ? "none" : "auto", opacity: locked ? 0.6 : 1 }}
+              onClick={() => {
+                if (locked) return;
+
+                setRefreshing(true);
+                setLocked(true);
+
+                onRefresh && onRefresh();
+
+                setTimeout(() => {
+                  setRefreshing(false);
+                }, 1000);
+
+                setTimeout(() => {
+                  setLocked(false);
+                }, 2400);
+              }}
+            />
+          </div>
+
           <div
             ref={clockBtnRef}
             className="clock"
@@ -120,7 +151,6 @@ export default function Taskbar({ icons, onOpenApp }) {
               setShowCalendar(prev => !prev);
               setShowSearch(false);
             }}
-            title={`${now.toLocaleDateString()} ${now.toLocaleTimeString()}`}
           >
             <div>
               {now.toLocaleTimeString([], {
@@ -129,11 +159,13 @@ export default function Taskbar({ icons, onOpenApp }) {
                 second: "2-digit",
               })}
             </div>
-            <div>{now.toLocaleDateString([], {
+            <div>
+              {now.toLocaleDateString([], {
                 day: "2-digit",
                 month: "2-digit",
                 year: "numeric",
-              })}</div>
+              })}
+            </div>
           </div>
         </div>
       </div>

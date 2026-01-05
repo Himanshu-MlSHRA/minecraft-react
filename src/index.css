@@ -38,14 +38,24 @@ body,
   width: 100%;
   height: 100%;
   overflow: hidden;
+  user-select: none;
+}
+
+.desktop-root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .fullscreen-bg {
+  position: absolute;
+  inset: 0;
   width: 100vw;
   height: 100vh;
   object-fit: fill;
-  display: block;
   pointer-events: none;
+  transition: opacity 0.9s ease;
 }
 
 .desktop-item {
@@ -207,7 +217,6 @@ body,
   scrollbar-gutter: stable;
 }
 
-
 .search-results {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -314,9 +323,11 @@ body,
 }
 
 .taskbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   color: white;
   font-size: 12px;
-  text-align: right;
   font-family: system-ui, sans-serif;
 }
 
@@ -325,7 +336,6 @@ body,
   padding: 4px 10px;
   border-radius: 10px;
   cursor: pointer;
-  gap: 10px;
   transition: background 180ms ease, transform 180ms ease;
 }
 
@@ -431,3 +441,132 @@ body,
   }
 }
 
+.system-tray {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tray-arrow {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 13px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tray-arrow:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.tray-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.tray-icon:hover {
+  opacity: 1;
+}
+
+.tray-lang {
+  font-family: "Minecraft Bold", system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.1;
+  text-align: center;
+  color: white;
+}
+
+.tray-sub {
+  font-size: 9px;
+  opacity: 0.75;
+}
+
+.refresh-btn {
+  cursor: pointer;
+}
+
+.spin {
+  animation: spinOnce 1s linear;
+}
+
+@keyframes spinOnce {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.music-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tray-icon.active {
+  transform: translateY(-1px) scale(1.05);
+  transition: transform 160ms ease;
+}
+
+.music-panel {
+  position: absolute;
+  bottom: 140%;
+  right: -6px;
+  width: 220px;
+  background: rgba(28, 28, 28, 0.96);
+  backdrop-filter: blur(18px);
+  border-radius: 14px;
+  padding: 14px;
+  z-index: 6000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: calendarDrop 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.music-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.music-title {
+  font-family: "Minecraft", system-ui, sans-serif;
+  font-size: 13px;
+  color: white;
+}
+
+.music-sub {
+  font-size: 11px;
+  opacity: 0.65;
+  color: white;
+}
+
+.music-slider-wrap {
+  padding: 6px 2px;
+}
+
+.music-panel input[type="range"] {
+  width: 100%;
+  cursor: pointer;
+}
+
+.music-panel input[type="range"]::-webkit-slider-thumb {
+  transform: scale(1.1);
+}
+
+.music-link {
+  font-size: 11px;
+  color: #4cc2ff;
+  text-decoration: none;
+  align-self: flex-start;
+}
+
+.music-link:hover {
+  text-decoration: underline;
+}
